@@ -5,9 +5,21 @@ import torch.nn.functional as F
 class Net(nn.Module):
     def __init__(self):
         super(Net, self).__init__()
-        self.fc0 = nn.Linear(28*28, 27)
+        self.layer1 = nn.Sequential(
+            nn.Conv2d(1, 28, kernel_size=5, padding=2),
+            nn.BatchNorm2d(28),
+            nn.ReLU(),
+            nn.MaxPool2d(2))
+        self.layer2 = nn.Sequential(
+            nn.Conv2d(28, 28, kernel_size=5, padding=2),
+            nn.BatchNorm2d(28),
+            nn.ReLU(),
+            nn.MaxPool2d(2))
+        self.fc = nn.Linear(7*7*28, 64)
 
     def forward(self, x):
-        x = self.fc0(x.view(x.size(0), -1))
-        
-        return F.log_softmax(x)
+        out = self.layer1(x)
+        out = self.layer2(out)
+        out = out.view(out.size(0), -1)
+        out = self.fc(out)
+        return F.log_softmax(out)
