@@ -15,6 +15,11 @@ class Net(nn.Module):
             nn.BatchNorm2d(28),
             nn.ReLU(),
             nn.MaxPool2d(2))
+        self.layer3 = nn.Sequential(
+            nn.Conv2d(28, 28, kernel_size=3, padding=1),
+            nn.BatchNorm2d(28),
+            nn.ReLU(),
+            nn.MaxPool2d(2))
         self.fc = nn.Linear(7*7*28, 64)
         self.fc2 = nn.Linear(64, 64)
 
